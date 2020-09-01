@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS lifescribe_scribbles CASCADE;
