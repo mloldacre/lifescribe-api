@@ -8,6 +8,7 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "migrate": "postgrator --config postgrator-config.js",
+    "migrate:test": "env NODE_ENV=test npm run migrate",
     "preDeploy": "npm audit",
     "deploy": "git push heroku master"
   },
@@ -23,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.5",
     "morgan": "^1.10.0",
+    "path": "^0.12.7",
     "pg": "^8.3.3",
     "xss": "^1.0.8"
   },

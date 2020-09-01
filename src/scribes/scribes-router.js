@@ -19,6 +19,49 @@ scribeRouter
         res.json(scribes.map(serializeScribe));
       })
       .catch(next);
+  })
+  .post(jsonParser, (req, res, next) => {
+    const { user_id, date_created } = req.body;
+    const newScribe = { user_id };
+
+    for (const [key, value] of Object.entries(newScribe))
+      // eslint-disable-next-line eqeqeq
+      if (value == null)
+        return res.status(400).json({
+          error: { message: `Missing '${key}' in request body` }
+        });
+
+    newScribe.date_created = date_created;
+
+    ScribeService.insertScribe(req.app.get('db'), newScribe)
+      .then(scribe => {
+        res.status(201)
+          .location(path.posix.join(req.originalUrl, `/${scribe.id}`))
+          .json(serializeScribe(scribe));
+      })
+      .catch(next);
   });
-  
+
+scribeRouter
+  .route('/:scribe_id')
+  .all((req, res, next) => {
+    ScribeService.getById(
+      req.app.get('db'),
+      req.params.scribe_id
+    )
+      .then(scribe => {
+        if (!scribe) {
+          return res.status(404).json({
+            error: { message: 'Scribe doesn\'t exist'}
+          });
+        }
+        res.scribe = scribe;
+        next();
+      })
+      .catch(next);
+  })
+  .get((req, res, next) => {
+    res.json(serializeScribe(res.scribe));
+  });
+
 module.exports = scribeRouter;
