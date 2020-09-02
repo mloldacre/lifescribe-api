@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const { requireAuth } = require('../middleware/jwt-auth');
 const ScribeService = require('./scribes-service');
 
 const scribeRouter = express.Router();

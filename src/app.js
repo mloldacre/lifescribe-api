@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const scribeRouter = require('./scribes/scribes-router');
 const scribbleRouter = require('./scribbles/scribbles-router');
+const authRouter = require('./auth/auth-router');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(cors());
 
 app.use('/api/scribes', scribeRouter);
 app.use('/api/scribbles', scribbleRouter);
+app.use('/api/auth', authRouter);
 
 app.get('/', (request, response) => {
   response.send('Hello, world!');
