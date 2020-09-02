@@ -13,70 +13,70 @@ VALUES
     'John',
     'One',
     'JOne',
-    'password-one',
+    '$2a$11$q5xJtsRSj1RJ1R6tTQOFVezlP5k/p4oSmptkWwG9WntsLb95YHaeO',
     'OneJ@email.com'
   ),
   (
     'Tim',
     'Two',
     'TTwo',
-    'password-two',
+    '$2a$11$yEBMQ89kNQlIDxDJRBqdSujvO2/OUJOdwV//Z9HksGypYYbAPLPFC',
     'TwoT@email.com'
   ),
   (
     'Jane',
     'Three',
     'JThree',
-    'password-three',
+    '$2a$11$Lxo5ZN1sTH/.nzIIGORlbePDO9IbVpPtw3Jg7s4Hwz7mMLCRC6Pfa',
     'ThreeJ@email.com'
   ),
   (
     'Mark',
     'Four',
     'MFour',
-    'password-four',
+    '$2a$11$9oQV8dzoIEAW9NekVmYyA.Nx75W4VjE1U4SVH3pvAUlwLtIFmYfl6',
     'FourM@email.com'
   ),
   (
     'Louis',
     'Five',
     'LFive',
-    'password-five',
+    '$2a$11$tv3IkrZpKynYK3.gUq.ZaOVf8vFf5TgLPT0NDBu9GRXDjBFgXrIqe',
     'FiveL@email.com'
   ),
   (
     'Jim',
     'Six',
     'JSix',
-    'password-six',
+    '$2a$11$xWE4v5LU9kMH6X7Lj5PSTeNK9qJi3YNEmoLftsh9SkzGkz0QbSDoG',
     'SixJ@email.com'
   ),
   (
     'Kevin',
     'Seven',
     'KSeven',
-    'password-seven',
+    '$2a$11$VuJyliriOFQUKDHiOGwwz..To9Rc3DQFd4t6mkvB3ZRDgRtqPcabO',
     'SevenK@email.com'
   ),
   (
     'Sue',
     'Eight',
     'SEight',
-    'password-eight',
+    '$2a$11$2.frdQ8FRLyPBlGUNaDJp.XkHCczcVOy2itJU/HUIRt2P.89oVAUa',
     'EightS@email.com'
   ),
   (
     'Pat',
     'Nine',
     'PNine',
-    'password-nine',
+    '$2a$11$B/YZe0MaMDhcZB.Cmj6MkOuvS0weDYSUyjXxwl.jpHPz5tfEY.TOS',
     'NineP@email.com'
   ),
   (
     'Gina',
     'Ten',
     'GTen',
-    'password-ten',
+    '$2a$11$fp8hPUfllPE6urXgkYctSe37LgaOXOpNUxNbB8HdxzvFelBAvFPjm',
     'TenG@email.com'
   );
   

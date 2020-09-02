@@ -14,13 +14,11 @@ const ScribesService = {
   },
 
   getById(knex, id) {
-    return knex
-      .from('lifescribe_scribes')
-      .select('*')
+    return this.getAllScribes(knex)
       .where('id', id)
       .first();
   },
-  
+
   deleteScribe(knex, id) {
     return knex('lifescribe_scribes')
       .where({ id })
@@ -32,20 +30,20 @@ const ScribesService = {
       .where({ id })
       .update(newScribeFields);
   },
-  
-  
+
+
   serializeScribes(scribes) {
     return scribes.map(this.serializeScribe);
   },
-  
+
   serializeScribe(scribe) {
     return {
       id: scribe.id,
       date_created: scribe.date_created,
       user_id: scribe.user_id
     };
-  } 
-  
+  }
+
 };
 
 module.exports = ScribesService;

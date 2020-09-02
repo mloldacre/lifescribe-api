@@ -5,7 +5,7 @@ const app = require('../src/app');
 const test = require('./test-fixtures');
 const supertest = require('supertest');
 
-describe.skip('Scribes Endpoints', () => {
+describe.only('Scribes Endpoints', () => {
   let db;
 
   const { testUsers, testScribes } = test.makeScribesFixtures();
@@ -53,13 +53,16 @@ describe.skip('Scribes Endpoints', () => {
     });
   });
 
-  describe('GET /api/scribes/:scribe_id', () => {
+  describe.only('GET /api/scribes/:scribe_id', () => {
     const scribeId = 2;
-    context('Given no scribes', () => {
+    context.only('Given no scribes', () => {
+      
+      
       it('responds with 404', () => {
 
         return supertest(app)
           .get(`/api/scribes/${scribeId}`)
+          .set('Authorization', test.makeAuthHeader(testUsers[0]))
           .expect(404, {
             error: { message: 'Scribe doesn\'t exist' }
           });

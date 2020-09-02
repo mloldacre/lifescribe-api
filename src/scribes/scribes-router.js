@@ -39,6 +39,7 @@ scribeRouter
 
 scribeRouter
   .route('/:scribe_id')
+  .all(requireAuth)
   .all((req, res, next) => {
     ScribeService.getById(
       req.app.get('db'),
@@ -58,5 +59,24 @@ scribeRouter
   .get((req, res, next) => {
     res.json(ScribeService.serializeScribe(res.scribe));
   });
+  
+async function checkScribeExists(req, res, next) {
+  try {
+    const scribe = await ScribeService.getById(
+      req.app.get('db'),
+      req.params.scribe_id
+    )
+
+    if (!scribe)
+      return res.status(404).json({
+        error: { message: 'Scribe doesn\'t exist' }
+      })
+
+    res.scribe = scribe
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
 
 module.exports = scribeRouter;
