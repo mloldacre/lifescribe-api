@@ -5,7 +5,7 @@ const app = require('../src/app');
 const test = require('./test-fixtures');
 const supertest = require('supertest');
 
-describe.only('Scribbles Endpoints', () => {
+describe.skip('Scribbles Endpoints', () => {
   let db;
 
   const { testUsers, testScribes, testScribbles } = test.makeScribesFixtures();

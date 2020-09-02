@@ -16,8 +16,8 @@ scribbleRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { scribble_type, scribble_content } = req.body;
-    const newScribble = { scribble_type, scribble_content };
+    const { scribble_type, scribble_content, scribe_id } = req.body;
+    const newScribble = { scribble_type, scribble_content, scribe_id };
 
     for (const [key, value] of Object.entries(newScribble))
       // eslint-disable-next-line eqeqeq
