@@ -27,10 +27,10 @@ const ScribblesService = {
       .delete();
   },
 
-  updateScribble(knex, id, newScribeFields) {
+  updateScribble(knex, id, newScribbleFields) {
     return knex('lifescribe_scribbles')
       .where({ id })
-      .update(newScribeFields);
+      .update(newScribbleFields);
   },
 
 

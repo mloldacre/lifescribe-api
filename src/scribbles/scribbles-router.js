@@ -41,7 +41,7 @@ scribbleRouter
   .all((req, res, next) => {
     ScribbleService.getById(
       req.app.get('db'),
-      req.params.scribe_id
+      req.params.scribble_id
     )
       .then(scribble => {
         if (!scribble) {
@@ -54,7 +54,7 @@ scribbleRouter
       })
       .catch(next);
   })
-  .get((req, res, next) => {
+  .get((req, res) => {
     res.json(ScribbleService.serializeScribble(res.scribble));
   })
   .delete((req, res, next) => {
@@ -63,6 +63,30 @@ scribbleRouter
       req.params.scribble_id
     )
       .then(() => {
+        res.status(204).end();
+      })
+      .catch(next);
+  })
+  .patch(jsonParser, (req, res, next) => {
+    const { scribble_content } = req.body;
+    const scribbleToUpdate = { scribble_content };
+
+
+    const numberOfValues = Object.values(scribbleToUpdate).filter(Boolean).length;
+    if (numberOfValues === 0) {
+      return res.status(400).json({
+        error: {
+          message: 'Request body must contain \'content\''
+        }
+      });
+    }
+
+    ScribbleService.updateScribble(
+      req.app.get('db'),
+      req.params.scribble_id,
+      scribbleToUpdate
+    )
+      .then(numRowsAffected => {
         res.status(204).end();
       })
       .catch(next);

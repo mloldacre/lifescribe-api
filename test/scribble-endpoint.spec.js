@@ -26,7 +26,7 @@ describe.only('Scribbles Endpoints', () => {
 
 
 
-  describe.only('GET /api/scribbles', () => {
+  describe('GET /api/scribbles', () => {
     context('Given no scribbles', () => {
       it('responds with 200 and an empty list', () => {
         return supertest(app)
@@ -35,7 +35,7 @@ describe.only('Scribbles Endpoints', () => {
       });
     });
 
-    context.only('Given there are scribbles in database', () => {
+    context('Given there are scribbles in database', () => {
       beforeEach('insert scribbles', () =>
         test.seedScribbleTables(db, testUsers, testScribes, testScribbles)
       );
@@ -53,29 +53,29 @@ describe.only('Scribbles Endpoints', () => {
     });
   });
 
-  describe('GET /api/scribes/:scribe_id', () => {
-    const scribeId = 2;
-    context('Given no scribes', () => {
+  describe('GET /api/scribbles/:scribble_id', () => {
+    const scribbleId = 2;
+    context('Given no scribbles', () => {
       it('responds with 404', () => {
 
         return supertest(app)
-          .get(`/api/scribes/${scribeId}`)
+          .get(`/api/scribbles/${scribbleId}`)
           .expect(404, {
-            error: { message: 'Scribe doesn\'t exist' }
+            error: { message: 'Scribble doesn\'t exist' }
           });
       });
     });
 
-    context('Given there are scribes in database', () => {
-      beforeEach('insert scribes', () =>
-        test.seedScribeTables(db, testUsers, testScribes)
+    context('Given there are scribbles in database', () => {
+      beforeEach('insert scribbles', () =>
+        test.seedScribbleTables(db, testUsers, testScribes, testScribbles)
       );
 
       it('responds with 200 and specified scribe', () => {
-        const expectedScribe = testScribes[scribeId - 1];
+        const expectedScribble = testScribbles[scribbleId - 1];
         return supertest(app)
-          .get(`/api/scribes/${scribeId}`)
-          .expect(200, expectedScribe);
+          .get(`/api/scribbles/${scribbleId}`)
+          .expect(200, expectedScribble);
       });
     });
   });
@@ -125,9 +125,90 @@ describe.only('Scribbles Endpoints', () => {
             error: { message: `Missing '${field}' in request body` }
           });
       });
+    });
+  });
 
+  describe('DELETE /api/scribbles/:scribble_id', () => {
+    const scribbleIdToRemove = 3;
+    context('Given no scribbles', () => {
+      it('responds with 404', () => {
+
+        return supertest(app)
+          .delete(`/api/scribbles/${scribbleIdToRemove}`)
+          .expect(404, {
+            error: { message: 'Scribble doesn\'t exist' }
+          });
+      });
     });
 
+    context('Given there are scribbles in the database', () => {
+      beforeEach('insert scribbles', () =>
+        test.seedScribbleTables(db, testUsers, testScribes, testScribbles)
+      );
+
+      it('responds with 204 and removes the scribble', () => {
+        const expectedScribbles = testScribbles.filter(scribble => scribble.id !== scribbleIdToRemove);
+        return supertest(app)
+          .delete(`/api/scribbles/${scribbleIdToRemove}`)
+          .expect(204)
+          .then(res =>
+            supertest(app)
+              .get('/api/scribbles')
+              .expect(expectedScribbles)
+          );
+      });
+    });
+  });
+
+  describe('PATCH /api/scribbles/:scribble_id', () => {
+    const scribbleIdToUpdate = 4;
+    context('Given no scribbles', () => {
+      it('responds with 404', () => {
+
+        return supertest(app)
+          .patch(`/api/scribbles/${scribbleIdToUpdate}`)
+          .expect(404, {
+            error: { message: 'Scribble doesn\'t exist' }
+          });
+      });
+    });
+
+    context('Given there are scribbles in the database', () => {
+      beforeEach('insert scribbles', () =>
+        test.seedScribbleTables(db, testUsers, testScribes, testScribbles)
+      );
+
+      it('responds with 204 and updates the scribble', () => {
+        const scribbleUpdate = {
+          scribble_content: 'Updated content'
+        };
+
+        const expectedScribble = {
+          ...testScribbles[scribbleIdToUpdate - 1],
+          ...scribbleUpdate
+        };
+        return supertest(app)
+          .patch(`/api/scribbles/${scribbleIdToUpdate}`)
+          .send(scribbleUpdate)
+          .expect(204)
+          .then(res =>
+            supertest(app)
+              .get(`/api/scribbles/${scribbleIdToUpdate}`)
+              .expect(expectedScribble)
+          );
+      });
+      
+      it('responds with 400 when no required field supplied', () => {
+        return supertest(app)
+          .patch(`/api/scribbles/${scribbleIdToUpdate}`)
+          .send({ madeUpField: 'This shouldn\'t work!'})
+          .expect(400, {
+            error: {
+              message: 'Request body must contain \'content\''
+            }
+          })
+      });      
+    });
   });
 
 });
