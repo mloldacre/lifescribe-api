@@ -22,17 +22,30 @@ const ScribesService = {
   },
   
   deleteScribe(knex, id) {
-    return knex('lifescribe_Scribes')
+    return knex('lifescribe_scribes')
       .where({ id })
       .delete();
   },
 
   updateScribe(knex, id, newScribeFields) {
-    return knex('lifescribe_Scribes')
+    return knex('lifescribe_scribes')
       .where({ id })
       .update(newScribeFields);
   },
-
+  
+  
+  serializeScribes(scribes) {
+    return scribes.map(this.serializeScribe);
+  },
+  
+  serializeScribe(scribe) {
+    return {
+      id: scribe.id,
+      date_created: scribe.date_created,
+      user_id: scribe.user_id
+    };
+  } 
+  
 };
 
 module.exports = ScribesService;

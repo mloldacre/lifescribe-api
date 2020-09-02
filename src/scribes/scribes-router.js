@@ -5,18 +5,13 @@ const ScribeService = require('./scribes-service');
 const scribeRouter = express.Router();
 const jsonParser = express.json();
 
-const serializeScribe = scribe => ({
-  id: scribe.id,
-  date_created: scribe.date_created,
-  user_id: scribe.user_id
-});
 
 scribeRouter
   .route('/')
   .get((req, res, next) => {
     ScribeService.getAllScribes(req.app.get('db'))
       .then(scribes => {
-        res.json(scribes.map(serializeScribe));
+        res.json(ScribeService.serializeScribes(scribes));
       })
       .catch(next);
   })
@@ -36,7 +31,7 @@ scribeRouter
       .then(scribe => {
         res.status(201)
           .location(path.posix.join(req.originalUrl, `/${scribe.id}`))
-          .json(serializeScribe(scribe));
+          .json(ScribeService.serializeScribe(scribe));
       })
       .catch(next);
   });
@@ -60,7 +55,7 @@ scribeRouter
       .catch(next);
   })
   .get((req, res, next) => {
-    res.json(serializeScribe(res.scribe));
+    res.json(ScribeService.serializeScribe(res.scribe));
   });
 
 module.exports = scribeRouter;

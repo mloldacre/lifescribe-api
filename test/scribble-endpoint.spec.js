@@ -1,14 +1,14 @@
-//TODO Create test for Scribe authenticated endpoint
+//TODO Create test for Scribble authenticated endpoint
 const { expect } = require('chai');
 const knex = require('knex');
 const app = require('../src/app');
 const test = require('./test-fixtures');
 const supertest = require('supertest');
 
-describe.skip('Scribes Endpoints', () => {
+describe.only('Scribbles Endpoints', () => {
   let db;
 
-  const { testUsers, testScribes } = test.makeScribesFixtures();
+  const { testUsers, testScribes, testScribbles } = test.makeScribesFixtures();
 
   before('make knex instance', () => {
     db = knex({
@@ -26,27 +26,27 @@ describe.skip('Scribes Endpoints', () => {
 
 
 
-  describe('GET /api/scribes', () => {
-    context('Given no scribes', () => {
+  describe.only('GET /api/scribbles', () => {
+    context('Given no scribbles', () => {
       it('responds with 200 and an empty list', () => {
         return supertest(app)
-          .get('/api/scribes')
+          .get('/api/scribbles')
           .expect(200, []);
       });
     });
 
-    context('Given there are scribes in database', () => {
-      beforeEach('insert scribes', () =>
-        test.seedScribeTables(db, testUsers, testScribes)
+    context.only('Given there are scribbles in database', () => {
+      beforeEach('insert scribbles', () =>
+        test.seedScribbleTables(db, testUsers, testScribes, testScribbles)
       );
 
-      it('responds with 200 and all scribes', () => {
-        const expectedScribes = testScribes.map(scribe =>
-          test.makeExpectedScribe(testUsers, scribe)
+      it('responds with 200 and all scribbles', () => {
+        const expectedScribbles = testScribbles.map(scribble =>
+          test.makeExpectedScribble(testScribes, scribble)
         );
         return supertest(app)
-          .get('/api/scribes')
-          .expect(200, expectedScribes);
+          .get('/api/scribbles')
+          .expect(200, expectedScribbles);
       });
 
       it('responds with 401 when API token isn\'t sent');

@@ -88,6 +88,67 @@ function makeScribesArray(users) {
   ];
 }
 
+function makeScribblesArray(scribes) {
+  return [
+    {
+      id: 1,
+      date_created: '2029-01-22T16:28:34.615Z',
+      scribble_type: 0,
+      scribble_content: 'Text scribble',
+      scribe_id: scribes[7].id
+    },
+    {
+      id: 2,
+      date_created: '2029-01-22T16:28:34.615Z',
+      scribble_type: 1,
+      scribble_content: 'Picture scribble',
+      scribe_id: scribes[6].id
+    },
+    {
+      id: 3,
+      date_created: '2029-01-22T16:28:34.615Z',
+      scribble_type: 2,
+      scribble_content: 'Audio scribble',
+      scribe_id: scribes[5].id
+    },
+    {
+      id: 4,
+      date_created: '2029-01-22T16:28:34.615Z',
+      scribble_type: 3,
+      scribble_content: 'Video scribble',
+      scribe_id: scribes[4].id
+    },
+    {
+      id: 5,
+      date_created: '2029-01-22T16:28:34.615Z',
+      scribble_type: 0,
+      scribble_content: 'Text scribble',
+      scribe_id: scribes[3].id
+    },
+    {
+      id: 6,
+      date_created: '2029-01-22T16:28:34.615Z',
+      scribble_type: 1,
+      scribble_content: 'Picture scribble',
+      scribe_id: scribes[2].id
+    },
+    {
+      id: 7,
+      date_created: '2029-01-22T16:28:34.615Z',
+      scribble_type: 2,
+      scribble_content: 'Audio scribble',
+      scribe_id: scribes[1].id
+    },
+    {
+      id: 8,
+      date_created: '2029-01-22T16:28:34.615Z',
+      scribble_type: 3,
+      scribble_content: 'Video scribble',
+      scribe_id: scribes[0].id
+    }
+  ];
+}
+
 function makeExpectedScribe(users, scribe) {
   const user = users.find(user => user.id === scribe.user_id);
 
@@ -98,10 +159,23 @@ function makeExpectedScribe(users, scribe) {
   };
 }
 
+function makeExpectedScribble(scribes, scribble) {
+  const scribe = scribes.find(scribe => scribe.id === scribble.scribe_id);
+
+  return {
+    id: scribble.id,
+    date_created: scribble.date_created,
+    scribble_type: scribble.scribble_type,
+    scribble_content: scribble.scribble_content,
+    scribe_id: scribe.id
+  };
+}
+
 function makeScribesFixtures() {
   const testUsers = makeUsersArray();
   const testScribes = makeScribesArray(testUsers);
-  return { testUsers, testScribes };
+  const testScribbles = makeScribblesArray(testScribes);
+  return { testUsers, testScribes, testScribbles };
 }
 
 function cleanTables(db) {
@@ -126,11 +200,25 @@ function seedScribeTables(db, users, scribes) {
     );
 }
 
+function seedScribbleTables(db, users, scribes, scribbles) {
+  return db.into('lifescribe_users')
+    .insert(users)
+    .then(() =>
+      db.into('lifescribe_scribes')
+        .insert(scribes)
+    )
+    .then(() =>
+      db.into('lifescribe_scribbles')
+        .insert(scribbles));
+}
+
 module.exports = {
   makeScribesArray,
   cleanTables,
   seedScribeTables,
   seedUserTables,
+  seedScribbleTables,
   makeScribesFixtures,
-  makeExpectedScribe
+  makeExpectedScribe,
+  makeExpectedScribble
 };
