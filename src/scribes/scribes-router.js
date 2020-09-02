@@ -21,7 +21,7 @@ scribeRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { user_id, date_created } = req.body;
+    const { user_id } = req.body;
     const newScribe = { user_id };
 
     for (const [key, value] of Object.entries(newScribe))
@@ -31,7 +31,6 @@ scribeRouter
           error: { message: `Missing '${key}' in request body` }
         });
 
-    newScribe.date_created = date_created;
 
     ScribeService.insertScribe(req.app.get('db'), newScribe)
       .then(scribe => {

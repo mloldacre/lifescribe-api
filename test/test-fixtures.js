@@ -105,23 +105,19 @@ function makeScribesFixtures() {
 }
 
 function cleanTables(db) {
-  return db.transaction(trx =>
-    trx.raw(`TRUNCATE
-      lifescribe_users,
+  return db.raw(`TRUNCATE
+      lifescribe_scribbles,
       lifescribe_scribes,
-      lifescribe_scribbles
-      RESTART IDENTITY CASCADE`)
-      .then(() =>
-        Promise.all([
-          trx.raw('ALTER SEQUENCE lifescribe_scribes_id_seq minvalue 0 START WITH 1'),
-          trx.raw('ALTER SEQUENCE lifescribe_users_id_seq minvalue 0 START WITH 1'),
-          trx.raw('SELECT setval(\'lifescribe_scribes_id_seq\', 0)'),
-          trx.raw('SELECT setval(\'lifescribe_users_id_seq\', 0)'),
-        ]))
-  );
+      lifescribe_users
+      RESTART IDENTITY CASCADE`);
 }
 
-function seedTables(db, users, scribes) {
+function seedUserTables(db, users) {
+  return db.into('lifescribe_users')
+    .insert(users);
+}
+
+function seedScribeTables(db, users, scribes) {
   return db.into('lifescribe_users')
     .insert(users)
     .then(() =>
@@ -133,7 +129,8 @@ function seedTables(db, users, scribes) {
 module.exports = {
   makeScribesArray,
   cleanTables,
-  seedTables,
+  seedScribeTables,
+  seedUserTables,
   makeScribesFixtures,
   makeExpectedScribe
 };

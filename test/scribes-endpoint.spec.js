@@ -23,8 +23,8 @@ describe.only('Scribes Endpoints', () => {
   before('cleanup', () => test.cleanTables(db));
 
   afterEach('cleanup', () => test.cleanTables(db));
-  
-  
+
+
 
   describe('GET /api/scribes', () => {
     context('Given no scribes', () => {
@@ -37,7 +37,7 @@ describe.only('Scribes Endpoints', () => {
 
     context('Given there are scribes in database', () => {
       beforeEach('insert scribes', () =>
-        test.seedTables(db, testUsers, testScribes)
+        test.seedScribeTables(db, testUsers, testScribes)
       );
 
       it('responds with 200 and all scribes', () => {
@@ -55,9 +55,9 @@ describe.only('Scribes Endpoints', () => {
 
   describe.only('POST /api/scribes', () => {
     beforeEach('insert scribes', () =>
-      test.seedTables(db, testUsers, testScribes)
-    );  
-    
+      test.seedUserTables(db, testUsers)
+    );
+
     it('responds with 201 and scribe if created', () => {
       const testParams = {
         user_id: 2
@@ -65,8 +65,42 @@ describe.only('Scribes Endpoints', () => {
       return supertest(app)
         .post('/api/scribes')
         .send(testParams)
-        .expect(201);
+        .expect(201)
+        .expect(res => {
+          expect(res.body.user_id).to.eql(testParams.user_id);
+          expect(res.body).to.have.property('id');
+          expect(res.headers.location).to.eql(`/api/scribes/${res.body.id}`);
+          const expected = new Date().toLocaleString();
+          const actual = new Date(res.body.date_created).toLocaleString();
+          expect(actual).to.eql(expected);
+        })
+        .then(postRes =>
+          supertest(app)
+            .get(`/api/scribes/${postRes.body.id}`)
+            .expect(postRes.body)
+        );
     });
+
+    const requiredFields = ['user_id'];
+
+    requiredFields.forEach(field => {
+      const newScribe = {
+        user_id: 2
+      };
+
+      it(`responds with 400 and an error message when the ${field} is missing`, () => {
+        delete newScribe[field];
+
+        return supertest(app)
+          .post('/api/scribes')
+          .send(newScribe)
+          .expect(400, {
+            error: { message: `Missing '${field}' in request body`}
+          });
+      });
+
+    });
+
   });
 
 });

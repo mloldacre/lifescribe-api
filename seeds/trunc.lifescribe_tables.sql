@@ -1,5 +1,5 @@
 TRUNCATE
-lifescribe_users,
+lifescribe_scribbles,
 lifescribe_scribes,
-lifescribe_scribbles
+lifescribe_users
 RESTART IDENTITY CASCADE;
