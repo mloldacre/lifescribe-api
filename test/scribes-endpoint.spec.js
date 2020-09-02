@@ -56,8 +56,8 @@ describe.only('Scribes Endpoints', () => {
   describe.only('GET /api/scribes/:scribe_id', () => {
     const scribeId = 2;
     context.only('Given no scribes', () => {
-      
-      
+
+    
       it('responds with 404', () => {
 
         return supertest(app)

@@ -3,6 +3,7 @@ const ScribesService = {
     return knex.select('*').from('lifescribe_scribes');
   },
 
+//TODO 
   insertScribe(knex, newScribe) {
     return knex
       .insert(newScribe)

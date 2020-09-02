@@ -32,6 +32,7 @@ authRouter
               });
             const sub = dbUser.user_name;
             const payload = { user_id: dbUser.id };
+            //TODO import scribe service here
             res.send({
               authToken: AuthService.createJwt(sub, payload),
             });
