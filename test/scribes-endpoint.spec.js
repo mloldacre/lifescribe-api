@@ -53,10 +53,12 @@ describe.only('Scribes Endpoints', () => {
     });
   });
 
-  describe.only('GET /api/scribes/:scribe_id', () => {
+  describe('GET /api/scribes/:scribe_id', () => {
     const scribeId = 2;
-    context.only('Given no scribes', () => {
-
+    context('Given no scribes', () => {
+      beforeEach('insert scribes', () =>
+        test.seedUserTables(db, testUsers)
+      );
     
       it('responds with 404', () => {
 
@@ -78,6 +80,7 @@ describe.only('Scribes Endpoints', () => {
         const expectedScribe = testScribes[scribeId - 1];
         return supertest(app)
           .get(`/api/scribes/${scribeId}`)
+          .set('Authorization', test.makeAuthHeader(testUsers[0]))
           .expect(200, expectedScribe);
       });
     });
@@ -94,11 +97,12 @@ describe.only('Scribes Endpoints', () => {
       };
       return supertest(app)
         .post('/api/scribes')
+        .set('Authorization', test.makeAuthHeader(testUsers[0]))
         .send(testParams)
         .expect(201)
         .expect(res => {
-          expect(res.body.user_id).to.eql(testParams.user_id);
           expect(res.body).to.have.property('id');
+          expect(res.body.user_id).to.eql(testParams.user_id);
           expect(res.headers.location).to.eql(`/api/scribes/${res.body.id}`);
           const expected = new Date().toLocaleString();
           const actual = new Date(res.body.date_created).toLocaleString();
@@ -107,6 +111,7 @@ describe.only('Scribes Endpoints', () => {
         .then(postRes =>
           supertest(app)
             .get(`/api/scribes/${postRes.body.id}`)
+            .set('Authorization', test.makeAuthHeader(testUsers[0]))
             .expect(postRes.body)
         );
     });
@@ -123,6 +128,7 @@ describe.only('Scribes Endpoints', () => {
 
         return supertest(app)
           .post('/api/scribes')
+          .set('Authorization', test.makeAuthHeader(testUsers[0]))
           .send(newScribe)
           .expect(400, {
             error: { message: `Missing '${field}' in request body` }

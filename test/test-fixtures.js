@@ -190,12 +190,15 @@ function cleanTables(db) {
 }
 
 function seedUserTables(db, users) {
-  const preppedUsers = users.map(user => ({
+  const encryptedUsers = users.map(user => ({
     ...user,
-    password: bcrypt.hashSync(user.password, 1)
+    password: bcrypt.hashSync(user.password, 11)
   }))
   return db.into('lifescribe_users')
-    .insert(users);
+    .insert(encryptedUsers)
+    .then(() => 
+      db.raw(`SELECT setval('lifescribe_users_id_seq', ?)`,
+        [users[users.length - 1].id]));
 }
 
 function seedScribeTables(db, users, scribes) {
