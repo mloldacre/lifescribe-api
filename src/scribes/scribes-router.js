@@ -9,7 +9,7 @@ const jsonParser = express.json();
 
 scribeRouter
   .route('/')
-  .all(requireAuth)
+  //.all(requireAuth)
   // .all(checkScribeExists)
   .get((req, res, next) => {
     ScribeService.getAllScribes(req.app.get('db'))
@@ -41,7 +41,7 @@ scribeRouter
 
 scribeRouter
   .route('/:scribe_id')
-  .all(requireAuth)
+ // .all(requireAuth)
   .all(checkScribeExists)
   .get((req, res, next) => {
     res.json(ScribeService.serializeScribe(res.scribe));
