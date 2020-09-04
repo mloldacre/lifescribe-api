@@ -47,6 +47,22 @@ scribeRouter
     res.json(ScribeService.serializeScribe(res.scribe));
   });
   
+scribeRouter
+  .route('/:scribe_id/scribbles')
+  // .all(requireAuth)
+  .all(checkScribeExists)
+  .get((req, res, next) => {
+    ScribeService.getScribblesForScribe(
+      req.app.get('db'),
+      req.params.scribe_id
+    )
+    .then(scribbles => {
+      
+    }
+      
+    )
+  });
+  
 async function checkScribeExists(req, res, next) {
   try {
     const scribe = await ScribeService.getById(

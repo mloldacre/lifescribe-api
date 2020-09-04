@@ -20,6 +20,16 @@ const ScribesService = {
       .first();
   },
 
+  getScribblesForScribe(knex, scribe_id) {
+    return knex
+      .from('lifescribe_scribbles AS scrib')
+      .select('scrib.id',
+        'scrib.date_created',
+        'scrib.scribble_type',
+        'scrib.scribble_content')
+      .where('scrib.scribe_id', scribe_id);
+  },
+
   deleteScribe(knex, id) {
     return knex('lifescribe_scribes')
       .where({ id })
@@ -42,6 +52,14 @@ const ScribesService = {
       id: scribe.id,
       date_created: scribe.date_created,
       user_id: scribe.user_id
+    };
+  },
+  
+  serializeScribeScribble(scribble){
+    return{
+      id: scribble.id,
+      date_created: scribble.date_created,
+      
     };
   }
 
