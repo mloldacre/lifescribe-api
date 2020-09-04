@@ -57,10 +57,9 @@ scribeRouter
       req.params.scribe_id
     )
     .then(scribbles => {
-      
-    }
-      
-    )
+      res.json(scribbles.map(ScribeService.serializeScribeScribble))
+    })
+    .catch(next)
   });
   
 async function checkScribeExists(req, res, next) {

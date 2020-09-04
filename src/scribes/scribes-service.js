@@ -59,7 +59,9 @@ const ScribesService = {
     return{
       id: scribble.id,
       date_created: scribble.date_created,
-      
+      scribble_type: scribble.scribble_type,
+      scribble_content: scribble.scribble_content,
+      scribe_id: scribble.scribe_id      
     };
   }
 

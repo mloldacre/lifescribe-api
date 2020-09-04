@@ -96,14 +96,24 @@ VALUES
   INSERT INTO lifescribe_scribbles(scribble_type, scribble_content, scribe_id)
   VALUES
   (0, 'Sample text scribble one', 1),
-  (0, 'Sample text scribble two', 2),
-  (0, 'Sample text scribble three', 3),
-  (0, 'Sample text scribble four', 4),
-  (0, 'Sample text scribble five', 5),
-  (0, 'Sample text scribble six', 6),
+  (1, 'Sample pic scribble two', 2),
+  (2, 'Sample audio scribble three', 3),
+  (3, 'Sample vid scribble four', 4),
+  (2, 'Sample audio scribble five', 5),
+  (1, 'Sample pic scribble six', 6),
   (0, 'Sample text scribble seven', 7),
-  (0, 'Sample text scribble eight', 8),
-  (0, 'Sample text scribble nine', 9),
-  (0, 'Sample text scribble ten', 10);
+  (1, 'Sample pic scribble eight', 8),
+  (2, 'Sample audio scribble nine', 9),
+  (3, 'Sample vid scribble ten', 10),
+  (2, 'Sample audio scribble eleven', 1),
+  (1, 'Sample pic scribble twelve', 2),
+  (0, 'Sample text scribble thirteen', 3),
+  (1, 'Sample pic scribble fourteen', 4),
+  (2, 'Sample audio scribble fifteen', 5),
+  (3, 'Sample video scribble sixteen', 6),
+  (2, 'Sample audio scribble seventeen', 7),
+  (1, 'Sample pic scribble eighteen', 8),
+  (0, 'Sample text scribble nineteen', 9),
+  (1, 'Sample pic scribble twenty', 10);
   
   COMMIT;
