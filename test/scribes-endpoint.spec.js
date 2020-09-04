@@ -8,7 +8,7 @@ const supertest = require('supertest');
 describe.only('Scribes Endpoints', () => {
   let db;
 
-  const { testUsers, testScribes } = test.makeScribesFixtures();
+  const { testUsers, testScribes, testScribbles } = test.makeScribesFixtures();
 
   before('make knex instance', () => {
     db = knex({
@@ -24,13 +24,67 @@ describe.only('Scribes Endpoints', () => {
 
   afterEach('cleanup', () => test.cleanTables(db));
 
+  describe('Protected endpoints', () => {
+    beforeEach('insert scribbles', () =>
+      test.seedScribbleTables(db, testUsers, testScribes, testScribbles)
+    );
 
+    const protectedEndpoints = [
+      {
+        name: 'GET /api/scribes/:scribe_id',
+        path: '/api/scribes/1'
+      },
+      // {
+      //   name: 'GET /api/scribes/:scribe_id/scribbles',
+      //   path: '/api/scribes/1/scribbles'
+      // }
+    ];
+
+    protectedEndpoints.forEach(endpoint => {
+
+      describe(endpoint.name, () => {
+        it('responds with 401 \'Missing bearer token\' when no bearer token', () => {
+          return supertest(app)
+            .get(endpoint.path)
+            .expect(401, { error: 'Missing bearer token' });
+        });
+      });
+
+      it('responds 401 \'Unauthorized request\' when no credentials in token', () => {
+        const userNoCreds = { user_name: '', password: '' };
+        return supertest(app)
+          .get(endpoint.path)
+          .set('Authorization', test.makeJWTAuthHeader(userNoCreds))
+          .expect(401, { error: 'Unauthorized request' });
+      });
+
+      it('responds 401 \'Unauthorized request\' when invalid user', () => {
+        const userInvalidUsername = { user_name: 'user-not', password: 'existy' };
+        return supertest(app)
+          .get(endpoint.path)
+          .set('Authorization', test.makeBasicAuthHeader(userInvalidUsername))
+          .expect(401, { error: 'Unauthorized request' });
+      });
+
+      it.only('responds 401 \'Unauthorized request\' when invalid password', () => {
+        const userInvalidPass = { user_name: testUsers[0].user_name, password: 'WRONG' };
+        return supertest(app)
+          .get(endpoint.path)
+          .set('Authorization', test.makeBasicAuthHeader(userInvalidPass))
+          .expect(401, { error: 'Unauthorized request' });
+      });
+    });
+  });
 
   describe('GET /api/scribes', () => {
     context('Given no scribes', () => {
+      beforeEach('insert scribes', () =>
+        test.seedUserTables(db, testUsers)
+      );
       it('responds with 200 and an empty list', () => {
         return supertest(app)
           .get('/api/scribes')
+          .set('Authorization', test.makeAuthHeader(testUsers[0]))
           .expect(200, []);
       });
     });
@@ -46,6 +100,7 @@ describe.only('Scribes Endpoints', () => {
         );
         return supertest(app)
           .get('/api/scribes')
+          .set('Authorization', test.makeAuthHeader(testUsers[0]))
           .expect(200, expectedScribes);
       });
 

@@ -32,6 +32,7 @@ authRouter
               });
             const sub = dbUser.user_name;
             const payload = { user_id: dbUser.id };
+            //TODO Create single scribe creation here using ScribeService
             /*
             get scribe for today
               if scribe does not exist
