@@ -3,7 +3,7 @@ const ScribesService = {
     return knex.select('*').from('lifescribe_scribes');
   },
 
-  //TODO Create getByDate method
+
   insertScribe(knex, newScribe) {
     return knex
       .insert(newScribe)
@@ -17,6 +17,13 @@ const ScribesService = {
   getById(knex, id) {
     return this.getAllScribes(knex)
       .where('id', id)
+      .first();
+  },
+
+  //TODO Create getByDate method
+  getByDate(knex, date) {
+    return this.getAllScribes(knex)
+      .where('date_created', date)
       .first();
   },
 
@@ -54,14 +61,14 @@ const ScribesService = {
       user_id: scribe.user_id
     };
   },
-  
-  serializeScribeScribble(scribble){
-    return{
+
+  serializeScribeScribble(scribble) {
+    return {
       id: scribble.id,
       date_created: scribble.date_created,
       scribble_type: scribble.scribble_type,
       scribble_content: scribble.scribble_content,
-      scribe_id: scribble.scribe_id      
+      scribe_id: scribble.scribe_id
     };
   }
 

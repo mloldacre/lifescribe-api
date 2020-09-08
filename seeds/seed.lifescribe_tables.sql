@@ -80,18 +80,18 @@ VALUES
     'TenG@email.com'
   );
   
-  INSERT INTO lifescribe_scribes (user_id)
+  INSERT INTO lifescribe_scribes (user_id, date_created)
   VALUES
-  (1),
-  (2),
-  (3),
-  (4),
-  (5),
-  (6),
-  (7),
-  (8),
-  (9),
-  (10);
+  (1, now() - '1 days'::INTERVAL),
+  (2, now() - '2 days'::INTERVAL),
+  (3, now() - '3 days'::INTERVAL),
+  (4, now() - '4 days'::INTERVAL),
+  (5, now() - '5 days'::INTERVAL),
+  (6, now() - '6 days'::INTERVAL),
+  (7, now() - '7 days'::INTERVAL),
+  (8, now() - '8 days'::INTERVAL),
+  (9, now() - '9 days'::INTERVAL),
+  (10, now() - '10 days'::INTERVAL);
   
   INSERT INTO lifescribe_scribbles(scribble_type, scribble_content, scribe_id)
   VALUES
