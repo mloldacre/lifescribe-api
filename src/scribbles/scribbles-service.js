@@ -44,7 +44,8 @@ const ScribblesService = {
       date_created: scribble.date_created,
       scribble_type: scribble.scribble_type,
       scribble_content: scribble.scribble_content,
-      scribe_id: scribble.scribe_id
+      scribe_id: scribble.scribe_id,
+      user_id: scribble.user_id
     };
   }
 

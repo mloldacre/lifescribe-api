@@ -40,7 +40,7 @@ scribeRouter
   });
 
 scribeRouter
-  .route('/:user_id')
+  .route('/u/:user_id')
   // .all(requireAuth)
   //.all(checkScribeExists)
   .get((req, res, next) => {
@@ -71,16 +71,16 @@ scribeRouter
   });
 
 scribeRouter
-  .route('/:scribe_id/scribbles')
+  .route('/:scribe_id')
   // .all(requireAuth)
   //.all(checkScribeExists)
   .get((req, res, next) => {
-    ScribeService.getScribblesForScribe(
+    ScribeService.getScribeById(
       req.app.get('db'),
       req.params.scribe_id
     )
-      .then(scribbles => {
-        res.json(scribbles.map(ScribeService.serializeScribeScribble))
+      .then(scribe => {
+        res.json(ScribeService.serializeScribe(scribe))
       })
       .catch(next)
   });

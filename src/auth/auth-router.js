@@ -7,6 +7,7 @@ const path = require('path');
 const authRouter = express.Router();
 const jsonBodyParser = express.json();
 
+
 authRouter
   .post('/login', jsonBodyParser, (req, res, next) => {
     const { user_name, password } = req.body;
@@ -44,7 +45,7 @@ authRouter
 
             ScribeService.getByDate(req.app.get('db'), user_id)
               .then(scribe => {
-                if (!scribe) {                  
+                if (!scribe) {
                   const newScribe = { user_id };
                   ScribeService.insertScribe(req.app.get('db'), newScribe)
                     .then(scribe => {
