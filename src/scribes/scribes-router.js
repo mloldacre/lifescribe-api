@@ -9,15 +9,15 @@ const jsonParser = express.json();
 
 scribeRouter
   .route('/')
-  //.all(requireAuth)
+  .all(requireAuth)
   // .all(checkScribeExists)
-  .get((req, res, next) => {
-    ScribeService.getAllScribes(req.app.get('db'))
-      .then(scribes => {
-        res.json(ScribeService.serializeScribes(scribes));
-      })
-      .catch(next);
-  })
+  // .get((req, res, next) => {
+  //   ScribeService.getAllScribes(req.app.get('db'))
+  //     .then(scribes => {
+  //       res.json(ScribeService.serializeScribes(scribes));
+  //     })
+  //     .catch(next);
+  // })
   .post(jsonParser, (req, res, next) => {
     const { user_id } = req.body;
     const newScribe = { user_id };
@@ -40,14 +40,14 @@ scribeRouter
   });
 
 scribeRouter
-  .route('/u/:user_id')
-  // .all(requireAuth)
+  .route('/user')
+  .all(requireAuth)
   //.all(checkScribeExists)
   .get((req, res, next) => {
 
     ScribeService.getScribesByUserId(
       req.app.get('db'),
-      req.params.user_id)
+      req.user.id)
       .then(scribes => {
         res.json(ScribeService.serializeScribes(scribes))
       })

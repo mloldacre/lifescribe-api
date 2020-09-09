@@ -35,7 +35,7 @@ authRouter
               });
             const sub = dbUser.user_name;
             const payload = { user_id: dbUser.id };
-            const { user_id } = payload;
+            
             //TODO Edit getByDate to include user_id
             /*
             get scribe for today
@@ -43,10 +43,11 @@ authRouter
                 create new scribe
             */
 
-            ScribeService.getByDate(req.app.get('db'), user_id)
+            ScribeService.getByDate(req.app.get('db'), dbUser.id)
               .then(scribe => {
+                console.log('scribe:', scribe);
                 if (!scribe) {
-                  const newScribe = { user_id };
+                  const newScribe = { user_id: dbUser.id };
                   ScribeService.insertScribe(req.app.get('db'), newScribe)
                     .then(scribe => {
                       res.status(201)

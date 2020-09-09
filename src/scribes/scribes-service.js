@@ -1,3 +1,5 @@
+const moment = require('moment-timezone');
+
 const ScribeService = {
   getAllScribes(knex) {
     return knex.select('*').from('lifescribe_scribes');
@@ -28,8 +30,8 @@ const ScribeService = {
   //TODO modify routes to filter by user_id
   getByDate(knex, user_id) {
     return this.getAllScribes(knex)
-      .where('date_created','>', knex.raw('current_date'))
-      .andWhere('id', user_id)
+      .where('date_created','>=', moment().format('YYYY-MM-DD'))
+      .andWhere('user_id', user_id)
       .first();
   },
 
