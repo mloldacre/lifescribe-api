@@ -1,18 +1,19 @@
 const express = require('express');
 const UsersService = require('./users-service');
+const path = require('path');
 
 const usersRouter = express.Router();
 const jsonBodyParser = express.json();
 
 usersRouter
   .post('/', jsonBodyParser, (req, res, next) => {
-    const { first_name, last_name, email, password, username } = req.body;
+    const { first_name, last_name, email, password, user_name } = req.body;
 
     for (const field of [
       'first_name',
       'last_name',
       'email',
-      'username',
+      'user_name',
       'password'])
       if (!req.body[field])
         return res.status(400).json({
@@ -26,20 +27,33 @@ usersRouter
 
     UsersService.hasUserWithUserName(
       req.app.get('db'),
-      username
+      user_name
     )
       .then(hasUserWithUserName => {
         if (hasUserWithUserName)
           return res.status(400).json({ error: 'Username already taken' });
-        const newUser = {
-          first_name,
-          last_name,
-          email,
-          password,
-          username
-        };
-        
-        
+        return UsersService.hashPassword(password)
+          .then(hashedPassword => {
+            const newUser = {
+              first_name,
+              last_name,
+              email,
+              password: hashedPassword,
+              user_name
+            };
+
+            return UsersService.insertUser(
+              req.app.get('db'),
+              newUser
+            )
+              .then(user => {
+                res
+                  .status(201)
+                  .location(path.posix.join(req.originalUrl, `/${user.id}`))
+                  .json(UsersService.serializeUser(user));
+              });
+          });
+
       }).catch(next);
   });
 

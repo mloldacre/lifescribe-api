@@ -1,10 +1,12 @@
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&])[\S]/;
+const xss = require('xss');
+const bcrypt = require('bcryptjs');
 
 const UsersService = {
 
-  hasUserWithUserName(knex, username) {
+  hasUserWithUserName(knex, user_name) {
     return knex('lifescribe_users')
-      .where({ username })
+      .where({ user_name })
       .first()
       .then(user => !!user);
   },
@@ -33,6 +35,20 @@ const UsersService = {
     }
     return null;
 
+  },
+
+  hashPassword(password) {
+    return bcrypt.hash(password, 11);
+  },
+
+  serializeUser(user) {
+    return {
+      id: user.id,
+      first_name: xss(user.first_name),
+      last_name: xss(user.last_name),
+      email: xss(user.email),
+      user_name: xss(user.user_name)
+    };
   },
 };
 
