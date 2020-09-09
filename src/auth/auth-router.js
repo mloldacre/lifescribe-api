@@ -1,6 +1,8 @@
 /* eslint-disable eqeqeq */
 const express = require('express');
 const AuthService = require('./auth-service');
+const ScribeService = require('.././scribes/scribes-service');
+const path = require('path');
 
 const authRouter = express.Router();
 const jsonBodyParser = express.json();
@@ -32,12 +34,27 @@ authRouter
               });
             const sub = dbUser.user_name;
             const payload = { user_id: dbUser.id };
-            //TODO Create single scribe creation here using ScribeService
+            const { user_id } = payload;
+            //TODO Edit getByDate to include user_id
             /*
             get scribe for today
               if scribe does not exist
                 create new scribe
             */
+
+            ScribeService.getByDate(req.app.get('db'))
+              .then(scribe => {
+                if (!scribe) {                  
+                  const newScribe = { user_id };
+                  ScribeService.insertScribe(req.app.get('db'), newScribe)
+                    .then(scribe => {
+                      res.status(201)
+                        .location(path.posix.join(req.originalUrl, `/${scribe.id}`))
+                        .json(ScribeService.serializeScribe(scribe));
+                    })
+                    .catch(next);
+                }
+              });
             res.send({
               authToken: AuthService.createJwt(sub, payload),
             });

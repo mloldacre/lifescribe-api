@@ -1,4 +1,4 @@
-const ScribesService = {
+const ScribeService = {
   getAllScribes(knex) {
     return knex.select('*').from('lifescribe_scribes');
   },
@@ -20,10 +20,10 @@ const ScribesService = {
       .first();
   },
 
-  //TODO Create getByDate method
-  getByDate(knex, date) {
+  //TODO modify routes to filter by user_id
+  getByDate(knex) {
     return this.getAllScribes(knex)
-      .where('date_created', date)
+      .where('date_created','>', knex.raw('current_date'))
       .first();
   },
 
@@ -74,4 +74,4 @@ const ScribesService = {
 
 };
 
-module.exports = ScribesService;
+module.exports = ScribeService;
