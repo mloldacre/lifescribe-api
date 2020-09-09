@@ -40,31 +40,54 @@ scribeRouter
   });
 
 scribeRouter
-  .route('/:scribe_id')
- // .all(requireAuth)
-  .all(checkScribeExists)
+  .route('/:user_id')
+  // .all(requireAuth)
+  //.all(checkScribeExists)
   .get((req, res, next) => {
-    res.json(ScribeService.serializeScribe(res.scribe));
+
+    ScribeService.getScribesByUserId(
+      req.app.get('db'),
+      req.params.user_id)
+      .then(scribes => {
+        res.json(ScribeService.serializeScribes(scribes))
+      })
+      .catch(next)
   });
   
 scribeRouter
-  .route('/:scribe_id/scribbles')
+  .route('/scribbles/:user_id/:scribe_id')
   // .all(requireAuth)
   .all(checkScribeExists)
   .get((req, res, next) => {
     ScribeService.getScribblesForScribe(
       req.app.get('db'),
+      req.params.user_id,
       req.params.scribe_id
     )
-    .then(scribbles => {
-      res.json(scribbles.map(ScribeService.serializeScribeScribble))
-    })
-    .catch(next)
+      .then(scribbles => {
+        res.json(scribbles.map(ScribeService.serializeScribeScribble))
+      })
+      .catch(next)
   });
-  
+
+scribeRouter
+  .route('/:scribe_id/scribbles')
+  // .all(requireAuth)
+  //.all(checkScribeExists)
+  .get((req, res, next) => {
+    ScribeService.getScribblesForScribe(
+      req.app.get('db'),
+      req.params.scribe_id
+    )
+      .then(scribbles => {
+        res.json(scribbles.map(ScribeService.serializeScribeScribble))
+      })
+      .catch(next)
+  });
+
 async function checkScribeExists(req, res, next) {
   try {
-    const scribe = await ScribeService.getById(
+    const scribe = await ScribeService.getScribeById(
       req.app.get('db'),
       req.params.scribe_id
     )

@@ -14,27 +14,34 @@ const ScribeService = {
       });
   },
 
-  getById(knex, id) {
+  getScribesByUserId(knex, user_id) {
     return this.getAllScribes(knex)
-      .where('id', id)
+      .where('user_id', user_id);
+  },
+  
+  getScribeById(knex, scribe_id) {
+    return this.getAllScribes(knex)
+      .where('id', scribe_id)
       .first();
   },
 
   //TODO modify routes to filter by user_id
-  getByDate(knex) {
+  getByDate(knex, user_id) {
     return this.getAllScribes(knex)
       .where('date_created','>', knex.raw('current_date'))
+      .andWhere('id', user_id)
       .first();
   },
 
-  getScribblesForScribe(knex, scribe_id) {
+  getScribblesForScribe(knex, user_id, scribe_id) {
     return knex
       .from('lifescribe_scribbles AS scrib')
       .select('scrib.id',
         'scrib.date_created',
         'scrib.scribble_type',
         'scrib.scribble_content')
-      .where('scrib.scribe_id', scribe_id);
+      .where('scrib.scribe_id', scribe_id)
+      .andWhere('scrib.user_id', user_id);
   },
 
   deleteScribe(knex, id) {
