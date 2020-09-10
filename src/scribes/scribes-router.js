@@ -40,7 +40,7 @@ scribeRouter
   });
 
 scribeRouter
-  .route('/user')
+  .route('/calendar')
   .all(requireAuth)
   //.all(checkScribeExists)
   .get((req, res, next) => {
@@ -55,14 +55,13 @@ scribeRouter
   });
   
 scribeRouter
-  .route('/scribbles/:user_id/:scribe_id')
-  // .all(requireAuth)
-  .all(checkScribeExists)
+  .route('/scribbles/')
+  .all(requireAuth)
+  //.all(checkScribeExists)
   .get((req, res, next) => {
     ScribeService.getScribblesForScribe(
       req.app.get('db'),
-      req.params.user_id,
-      req.params.scribe_id
+      req.user.id
     )
       .then(scribbles => {
         res.json(scribbles.map(ScribeService.serializeScribeScribble))

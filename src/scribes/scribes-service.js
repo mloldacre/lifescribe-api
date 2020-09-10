@@ -35,14 +35,14 @@ const ScribeService = {
       .first();
   },
 
-  getScribblesForScribe(knex, user_id, scribe_id) {
+  getScribblesForScribe(knex, user_id) {
     return knex
       .from('lifescribe_scribbles AS scrib')
       .select('scrib.id',
         'scrib.date_created',
         'scrib.scribble_type',
         'scrib.scribble_content')
-      .where('scrib.scribe_id', scribe_id)
+      .where('scrib.date_created', '=', moment().format('YYYY-MM-DD'))
       .andWhere('scrib.user_id', user_id);
   },
 
