@@ -10,14 +10,15 @@ const jsonParser = express.json();
 scribeRouter
   .route('/')
   .all(requireAuth)
-  // .all(checkScribeExists)
-  // .get((req, res, next) => {
-  //   ScribeService.getAllScribes(req.app.get('db'))
-  //     .then(scribes => {
-  //       res.json(ScribeService.serializeScribes(scribes));
-  //     })
-  //     .catch(next);
-  // })
+  .get((req, res, next) => {
+    ScribeService.getScribesByUserId(
+      req.app.get('db'),
+      req.user.id)
+      .then(scribes => {
+        res.json(ScribeService.serializeScribes(scribes))
+      })
+      .catch(next)
+  })
   .post(jsonParser, (req, res, next) => {
     const { user_id } = req.body;
     const newScribe = { user_id };
@@ -38,21 +39,6 @@ scribeRouter
       })
       .catch(next);
   });
-
-scribeRouter
-  .route('/calendar')
-  .all(requireAuth)
-  //.all(checkScribeExists)
-  .get((req, res, next) => {
-
-    ScribeService.getScribesByUserId(
-      req.app.get('db'),
-      req.user.id)
-      .then(scribes => {
-        res.json(ScribeService.serializeScribes(scribes))
-      })
-      .catch(next)
-  });
   
 scribeRouter
   .route('/scribbles/')
@@ -70,13 +56,13 @@ scribeRouter
   });
 
 scribeRouter
-  .route('/:scribe_id')
-  // .all(requireAuth)
+  .route('/currentScribe')
+  .all(requireAuth)
   //.all(checkScribeExists)
   .get((req, res, next) => {
-    ScribeService.getScribeById(
+    ScribeService.getCurrentScribe(
       req.app.get('db'),
-      req.params.scribe_id
+      req.user.id
     )
       .then(scribe => {
         res.json(ScribeService.serializeScribe(scribe))

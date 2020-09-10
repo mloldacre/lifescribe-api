@@ -21,9 +21,10 @@ const ScribeService = {
       .where('user_id', user_id);
   },
   
-  getScribeById(knex, scribe_id) {
+  getCurrentScribe(knex, user_id) {
     return this.getAllScribes(knex)
-      .where('id', scribe_id)
+      .where('user_id', user_id)
+      .andWhere('date_created', '=', moment().format('YYYY-MM-DD'))
       .first();
   },
 
@@ -40,6 +41,7 @@ const ScribeService = {
       .from('lifescribe_scribbles AS scrib')
       .select('scrib.id',
         'scrib.date_created',
+        'scrib.time_created',
         'scrib.scribble_type',
         'scrib.scribble_content')
       .where('scrib.date_created', '=', moment().format('YYYY-MM-DD'))
