@@ -38,7 +38,6 @@ authRouter
             
             ScribeService.getByDate(req.app.get('db'), dbUser.id)
               .then(scribe => {
-                console.log('scribe:', scribe);
                 if (!scribe) {
                   const newScribe = { user_id: dbUser.id };
                   ScribeService.insertScribe(req.app.get('db'), newScribe)
