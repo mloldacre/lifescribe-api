@@ -27,7 +27,6 @@ scribbleRouter
           error: { message: `Missing '${key}' in request body` }
         });
 
-
     ScribbleService.insertScribble(req.app.get('db'), newScribble)
       .then(scribble => {
         res.status(201)
@@ -81,6 +80,8 @@ scribbleRouter
         }
       });
     }
+
+    scribbleToUpdate.time_created = new Date();
 
     ScribbleService.updateScribble(
       req.app.get('db'),

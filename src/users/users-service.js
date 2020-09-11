@@ -33,6 +33,12 @@ const UsersService = {
       .where('id', id)
       .first();
   },
+  
+  deleteUser(knex, id) {
+    return knex('lifescribe_users')
+      .where('id', id)
+      .delete();
+  },
 
   validatePassword(password) {
     if (password.length < 8) {

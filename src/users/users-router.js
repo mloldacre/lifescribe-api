@@ -59,12 +59,12 @@ usersRouter
   });
 
 usersRouter
-  .route('/:user_id')
+  .route('/')
   .all(requireAuth)
   .all((req, res, next) => {
     UsersService.getById(
       req.app.get('db'),
-      req.params.user_id
+      req.user.id
     )
       .then(user => {
         if (!user) {
@@ -74,6 +74,19 @@ usersRouter
         }
         res.user = user;
         next();
+      })
+      .catch(next);
+  })
+  .get((req, res) => {
+    res.json(UsersService.serializeUser(res.user));    
+  })
+  .delete((req, res, next) => {
+    UsersService.deleteUser(
+      req.app.get('db'),
+      req.user.id
+    )
+      .then(() => {
+        res.status(204).end();
       })
       .catch(next);
   })
@@ -94,7 +107,7 @@ usersRouter
 
     UsersService.updateUser(
       req.app.get('db'),
-      req.params.user_id,
+      req.user.id,
       updatedUserProfile
     )
       .then(numRowsAffected => {
