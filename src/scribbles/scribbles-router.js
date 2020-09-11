@@ -4,7 +4,7 @@ const ScribbleService = require('./scribbles-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 
 const scribbleRouter = express.Router();
-const jsonParser = express.json();
+const jsonBodyParser = express.json();
 
 
 scribbleRouter
@@ -16,7 +16,7 @@ scribbleRouter
       })
       .catch(next);
   })
-  .post(jsonParser, (req, res, next) => {
+  .post(jsonBodyParser, (req, res, next) => {
     const { scribble_type, scribble_content, scribe_id, user_id } = req.body;
     const newScribble = { scribble_type, scribble_content, scribe_id, user_id };
 
@@ -39,7 +39,7 @@ scribbleRouter
 
 scribbleRouter
   .route('/:scribble_id')
-  //.all(requireAuth)
+  .all(requireAuth)
   .all((req, res, next) => {
     ScribbleService.getById(
       req.app.get('db'),
@@ -69,7 +69,7 @@ scribbleRouter
       })
       .catch(next);
   })
-  .patch(jsonParser, (req, res, next) => {
+  .patch(jsonBodyParser, (req, res, next) => {
     const { scribble_content } = req.body;
     const scribbleToUpdate = { scribble_content };
 

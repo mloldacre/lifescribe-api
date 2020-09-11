@@ -36,13 +36,6 @@ authRouter
             const sub = dbUser.user_name;
             const payload = { user_id: dbUser.id };
             
-            //TODO Edit getByDate to include user_id
-            /*
-            get scribe for today
-              if scribe does not exist
-                create new scribe
-            */
-
             ScribeService.getByDate(req.app.get('db'), dbUser.id)
               .then(scribe => {
                 console.log('scribe:', scribe);

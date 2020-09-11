@@ -1,6 +1,7 @@
 const express = require('express');
 const UsersService = require('./users-service');
 const path = require('path');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 const usersRouter = express.Router();
 const jsonBodyParser = express.json();
@@ -55,6 +56,52 @@ usersRouter
           });
 
       }).catch(next);
+  });
+
+usersRouter
+  .route('/:user_id')
+  .all(requireAuth)
+  .all((req, res, next) => {
+    UsersService.getById(
+      req.app.get('db'),
+      req.params.user_id
+    )
+      .then(user => {
+        if (!user) {
+          return res.status(404).json({
+            error: { message: 'user doesn\'t exist' }
+          });
+        }
+        res.user = user;
+        next();
+      })
+      .catch(next);
+  })
+  .patch(jsonBodyParser, (req, res, next) => {
+    const { first_name, last_name, user_name, email, password } = req.body;
+    const updatedUserProfile = { first_name, last_name, user_name, email, password };
+
+    const numberOfValues = Object.values(updatedUserProfile).filter(Boolean).length;
+    if (numberOfValues === 0) {
+      return res.status(400).json({
+        error: {
+          message: 'Request body must contain \'content\''
+        }
+      });
+    }
+
+    updatedUserProfile.date_modified = new Date();
+
+    UsersService.updateUser(
+      req.app.get('db'),
+      req.params.user_id,
+      updatedUserProfile
+    )
+      .then(numRowsAffected => {
+        res.status(204).end();
+      })
+      .catch(next);
+
   });
 
 module.exports = usersRouter;

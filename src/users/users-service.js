@@ -19,6 +19,20 @@ const UsersService = {
       .then(([user]) => user);
 
   },
+  
+  updateUser(knex, id, newUserFields) {
+    return knex('lifescribe_users')
+      .where({ id })
+      .update(newUserFields);
+  },
+  
+  getById(knex, id) {
+    return knex
+      .from('lifescribe_users')
+      .select('*')
+      .where('id', id)
+      .first();
+  },
 
   validatePassword(password) {
     if (password.length < 8) {
