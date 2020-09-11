@@ -15,14 +15,14 @@ const AuthService = {
   },
 
   createJwt(subject, payload) {
-    return jwt.sign(payload, config.JWT_SECRET, {
+    return jwt.sign(payload, config.API_TOKEN, {
       subject,
       algorithm: 'HS256',
     });
   },
 
   verifyJwt(token) {
-    return jwt.verify(token, config.JWT_SECRET, {
+    return jwt.verify(token, config.API_TOKEN, {
       algorithms: ['HS256'],
     });
   },
