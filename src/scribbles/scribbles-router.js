@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const ScribbleService = require('./scribbles-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 const scribbleRouter = express.Router();
 const jsonParser = express.json();
@@ -38,6 +39,7 @@ scribbleRouter
 
 scribbleRouter
   .route('/:scribble_id')
+  //.all(requireAuth)
   .all((req, res, next) => {
     ScribbleService.getById(
       req.app.get('db'),
@@ -70,7 +72,6 @@ scribbleRouter
   .patch(jsonParser, (req, res, next) => {
     const { scribble_content } = req.body;
     const scribbleToUpdate = { scribble_content };
-
 
     const numberOfValues = Object.values(scribbleToUpdate).filter(Boolean).length;
     if (numberOfValues === 0) {

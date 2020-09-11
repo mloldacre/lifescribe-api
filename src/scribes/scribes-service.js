@@ -28,7 +28,6 @@ const ScribeService = {
       .first();
   },
 
-  //TODO modify routes to filter by user_id
   getByDate(knex, user_id) {
     return this.getAllScribes(knex)
       .where('date_created','>=', moment().format('YYYY-MM-DD'))
@@ -36,7 +35,7 @@ const ScribeService = {
       .first();
   },
 
-  getScribblesForScribe(knex, user_id) {
+  getScribeScribbles(knex, user_id) {
     return knex
       .from('lifescribe_scribbles AS scrib')
       .select('scrib.id',
@@ -77,6 +76,7 @@ const ScribeService = {
     return {
       id: scribble.id,
       date_created: scribble.date_created,
+      time_created: scribble.time_created,
       scribble_type: scribble.scribble_type,
       scribble_content: scribble.scribble_content,
       scribe_id: scribble.scribe_id

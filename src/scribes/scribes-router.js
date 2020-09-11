@@ -45,7 +45,7 @@ scribeRouter
   .all(requireAuth)
   //.all(checkScribeExists)
   .get((req, res, next) => {
-    ScribeService.getScribblesForScribe(
+    ScribeService.getScribeScribbles(
       req.app.get('db'),
       req.user.id
     )
