@@ -222,7 +222,7 @@ function seedScribbleTables(db, users, scribes, scribbles) {
         .insert(scribbles));
 }
 
-function makeJWTAuthHeader(user, secret = process.env.JWT_SECRET) {
+function makeJWTAuthHeader(user, secret = process.env.API_TOKEN) {
   const token = jwt.sign({ user_id: user.id }, secret, {
     subject: user.user_name,
     algorithm: 'HS256',
