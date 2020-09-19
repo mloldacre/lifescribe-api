@@ -3,6 +3,11 @@ const ScribblesService = {
     return knex.select('*').from('lifescribe_scribbles');
   },
 
+  getScribblesForScribe(knex, scribeId) {
+    return knex.select('*').from('lifescribe_scribbles')
+      .where('scribe_id', scribeId);
+  },
+
   insertScribble(knex, newScribble) {
     return knex
       .insert(newScribble)

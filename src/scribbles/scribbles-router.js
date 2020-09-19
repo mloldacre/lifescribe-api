@@ -37,6 +37,28 @@ scribbleRouter
   });
 
 scribbleRouter
+  .route('/for_scribe/:scribe_id')
+  .all(requireAuth)
+  .all((req, res, next) => {
+    ScribbleService.getScribblesForScribe(
+      req.app.get('db'),
+      req.params.scribe_id    )
+      .then(scribbles => {
+        if (!scribbles) {
+          return res.status(404).json({
+            error: { message: 'Scribbles don\'t exist' }
+          });
+        }
+        res.scribbles = scribbles;
+        next();
+      })
+      .catch(next);
+  })
+  .get((req, res) => {
+    res.json(res.scribbles.map(scribble => ScribbleService.serializeScribble(scribble)));
+  });
+
+scribbleRouter
   .route('/:scribble_id')
   .all(requireAuth)
   .all((req, res, next) => {
