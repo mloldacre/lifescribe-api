@@ -4,7 +4,7 @@ CREATE TABLE lifescribe_users (
   last_name TEXT NOT NULL,
   user_name TEXT NOT NULL UNIQUE,
   PASSWORD TEXT NOT NULL,
-  email TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
   date_created TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   date_modified TIMESTAMPTZ
 );

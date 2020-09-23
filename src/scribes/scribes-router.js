@@ -15,9 +15,9 @@ scribeRouter
       req.app.get('db'),
       req.user.id)
       .then(scribes => {
-        res.json(ScribeService.serializeScribes(scribes))
+        res.json(ScribeService.serializeScribes(scribes));
       })
-      .catch(next)
+      .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
     const { user_id } = req.body;
@@ -43,50 +43,31 @@ scribeRouter
 scribeRouter
   .route('/scribbles/')
   .all(requireAuth)
-  //.all(checkScribeExists)
   .get((req, res, next) => {
     ScribeService.getScribeScribbles(
       req.app.get('db'),
       req.user.id
     )
       .then(scribbles => {
-        res.json(scribbles.map(ScribeService.serializeScribeScribble))
+        res.json(scribbles.map(ScribeService.serializeScribeScribble));
       })
-      .catch(next)
+      .catch(next);
   });
 
 scribeRouter
   .route('/currentScribe')
   .all(requireAuth)
-  //.all(checkScribeExists)
   .get((req, res, next) => {
     ScribeService.getCurrentScribe(
       req.app.get('db'),
       req.user.id
     )
       .then(scribe => {
-        res.json(ScribeService.serializeScribe(scribe))
+        res.json(ScribeService.serializeScribe(scribe));
       })
-      .catch(next)
+      .catch(next);
   });
 
-async function checkScribeExists(req, res, next) {
-  try {
-    const scribe = await ScribeService.getScribeById(
-      req.app.get('db'),
-      req.params.scribe_id
-    )
 
-    if (!scribe)
-      return res.status(404).json({
-        error: { message: 'Scribe doesn\'t exist' }
-      })
-
-    res.scribe = scribe
-    next()
-  } catch (error) {
-    next(error)
-  }
-}
 
 module.exports = scribeRouter;

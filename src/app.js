@@ -7,7 +7,7 @@ const { NODE_ENV } = require('./config');
 const scribeRouter = require('./scribes/scribes-router');
 const scribbleRouter = require('./scribbles/scribbles-router');
 const authRouter = require('./auth/auth-router');
-const usersRouter = require('./users/users-router')
+const usersRouter = require('./users/users-router');
 
 const app = express();
 

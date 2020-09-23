@@ -1,4 +1,5 @@
 const moment = require('moment-timezone');
+const xss = require('xss');
 
 const ScribeService = {
   getAllScribes(knex) {
@@ -78,7 +79,7 @@ const ScribeService = {
       date_created: scribble.date_created,
       time_created: scribble.time_created,
       scribble_type: scribble.scribble_type,
-      scribble_content: scribble.scribble_content,
+      scribble_content: xss(scribble.scribble_content),
       scribe_id: scribble.scribe_id
     };
   }
