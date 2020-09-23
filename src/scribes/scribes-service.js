@@ -44,7 +44,8 @@ const ScribeService = {
         'scrib.time_created',
         'scrib.scribble_type',
         'scrib.scribble_content')
-      .where('scrib.date_created', '=', moment().format('YYYY-MM-DD'))
+      .where('scrib.date_created', '>=', moment().startOf('day').toISOString())
+      .andWhere('scrib.date_created', '<=', moment().endOf('day').toISOString())
       .andWhere('scrib.user_id', user_id);
   },
 
