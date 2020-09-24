@@ -25,7 +25,8 @@ const ScribeService = {
   getCurrentScribe(knex, user_id) {
     return this.getAllScribes(knex)
       .where('user_id', user_id)
-      .andWhere('date_created', '=', moment().format('YYYY-MM-DD'))
+      .andWhere('date_created', '>=', moment().startOf('day').toISOString())
+      .andWhere('date_created', '<=', moment().endOf('day').toISOString())
       .first();
   },
 
