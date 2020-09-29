@@ -30,7 +30,7 @@ const ScribeService = {
       .first();
   },
 
-  getByDate(knex, user_id) {
+  getByDate(knex, user_id) { // Used to retrieve the current scribe for the day if a user logs out then back in
     return this.getAllScribes(knex)
       .where('date_created','>=', moment().format('YYYY-MM-DD'))
       .andWhere('user_id', user_id)

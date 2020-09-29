@@ -10,7 +10,7 @@ const jsonParser = express.json();
 scribeRouter
   .route('/')
   .all(requireAuth)
-  .get((req, res, next) => {
+  .get((req, res, next) => { // GETS all scribes attached to a user, used calender view on frontend
     ScribeService.getScribesByUserId(
       req.app.get('db'),
       req.user.id)
@@ -43,7 +43,7 @@ scribeRouter
 scribeRouter
   .route('/scribbles/')
   .all(requireAuth)
-  .get((req, res, next) => {
+  .get((req, res, next) => { // GETS the all scribbles attached to a scribe
     ScribeService.getScribeScribbles(
       req.app.get('db'),
       req.user.id
@@ -57,7 +57,7 @@ scribeRouter
 scribeRouter
   .route('/currentScribe')
   .all(requireAuth)
-  .get((req, res, next) => {
+  .get((req, res, next) => { // GETS the current scribe for the day when the user navigates back to main menu or current scribe entry
     ScribeService.getCurrentScribe(
       req.app.get('db'),
       req.user.id

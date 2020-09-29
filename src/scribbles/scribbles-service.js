@@ -4,7 +4,8 @@ const ScribblesService = {
   getAllScribbles(knex) {
     return knex.select('*').from('lifescribe_scribbles');
   },
-
+  
+  // GETS the scribbles attached to a scribe by the scribe ID
   getScribblesForScribe(knex, scribeId) {
     return knex.select('*').from('lifescribe_scribbles')
       .where('scribe_id', scribeId);

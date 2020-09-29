@@ -9,14 +9,14 @@ const jsonBodyParser = express.json();
 
 scribbleRouter
   .route('/')
-  .get((req, res, next) => {
+  .get((req, res, next) => { // GETS list of all scribbles, used for testing purpose
     ScribbleService.getAllScribbles(req.app.get('db'))
       .then(scribbles => {
         res.json(ScribbleService.serializeScribbles(scribbles));
       })
       .catch(next);
   })
-  .post(jsonBodyParser, (req, res, next) => {
+  .post(jsonBodyParser, (req, res, next) => { //POST a scribble by getting the type, content, scribe ID, and user ID it belongs too
     const { scribble_type, scribble_content, scribe_id, user_id } = req.body;
     const newScribble = { scribble_type, scribble_content, scribe_id, user_id };
 
@@ -36,6 +36,8 @@ scribbleRouter
       .catch(next);
   });
 
+// GETS scribbles for the scribe based on ID, used to look up previous scribes
+// and scribbles
 scribbleRouter
   .route('/for_scribe/:scribe_id')
   .all(requireAuth)
@@ -58,6 +60,7 @@ scribbleRouter
     res.json(res.scribbles.map(scribble => ScribbleService.serializeScribble(scribble)));
   });
 
+// Used to interact with individual scribbles (basic CRUD operations)
 scribbleRouter
   .route('/:scribble_id')
   .all(requireAuth)

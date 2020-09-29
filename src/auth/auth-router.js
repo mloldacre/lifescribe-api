@@ -36,6 +36,9 @@ authRouter
             const sub = dbUser.user_name;
             const payload = { user_id: dbUser.id };
             
+            // Create Scribe when user logs in for the first time in the day, if
+            // Scribe already exists then skip and just log in
+            
             ScribeService.getByDate(req.app.get('db'), dbUser.id)
               .then(scribe => {
                 if (!scribe) {
