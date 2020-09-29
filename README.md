@@ -1,6 +1,6 @@
 <h1 id="lifescribe">LifeScribe</h1>
 
-[Here's the website](https://lifescribe.vercel.app/)
+[Here's the website: Start Scribbling!](https://lifescribe.vercel.app/)
 
 <h2 id="what-is-lifescribe">What is LifeScribe?</h2>
 <p>LifeScribe is an online web journal application in which users are able to log in and enter their thoughts (scribbles) and review them by day and time entered!</p>
