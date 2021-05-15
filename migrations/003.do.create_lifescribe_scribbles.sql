@@ -6,4 +6,4 @@ CREATE TABLE lifescribe_scribbles (
   scribble_content TEXT NOT NULL,
   scribe_id INTEGER REFERENCES lifescribe_scribes(id) ON DELETE CASCADE NOT NULL,
   user_id INTEGER REFERENCES lifescribe_users(id) ON DELETE CASCADE NOT NULL
-)
+);
