@@ -27,7 +27,7 @@
     "express": "^4.17.1",
     "helmet": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.21.5",
+    "knex": "^2.4.0",
     "moment-timezone": "^0.5.31",
     "momentjs": "^2.0.0",
     "morgan": "^1.10.0",
